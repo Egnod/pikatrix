@@ -16,10 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{{{ matrix.python-version }}}}
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{{{ matrix.python-version }}}}
 
     - name: Install dependencies
       run: |
@@ -33,7 +33,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+        echo ${{{{ secrets.DOCKER_HUB_TOKEN }}}} | docker login -u ${{{{ secrets.DOCKER_HUB_USER }}}} --password-stdin
         docker build -f staging.dockerfile -t egnod/{{cookiecutter.project_name}}:latest .
 
     - name: Push Docker image
