@@ -1,0 +1,7 @@
+{
+    "project_name": "pikatrix",
+    "project_name_upper": "PIKATRIX",
+    "project_description": "Pikatrix - fastapi + mongodb (motor client) template",
+    "project_author": "Alexander Lavrov <internal@egnod.dev>",
+    "project_email": "internal@egnod.dev"
+}

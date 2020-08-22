@@ -1,0 +1,55 @@
+name: {{cookiecutter.project_name}} app
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry config virtualenvs.create false --local && poetry install --no-root
+
+    - name: Lint pre-commit
+      run: |
+        pre-commit run -a
+
+    - name: Build Docker image
+      run: |
+        echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+        docker build -f staging.dockerfile -t egnod/{{cookiecutter.project_name}}:latest .
+
+    - name: Push Docker image
+      run: |
+        docker push egnod/{{cookiecutter.project_name}}:latest
+
+    - name: Update server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        script: |
+          pip3 install docker-compose
+          cd ${{ secrets.TARGET_PATH }}
+          docker-compose pull back
+          docker-compose up -d --force-recreate back
