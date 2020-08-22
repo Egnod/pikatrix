@@ -1,6 +1,6 @@
 <p  align="center">
 <a  href="https://github.com/Egnod/pikatrix">
-<img  src="https://gist.githubusercontent.com/Egnod/3ae58219c9ef62e08bbbcefac6633b1d/raw/pikatrix_logo.svg">
+<img width="250" src="https://gist.githubusercontent.com/Egnod/3ae58219c9ef62e08bbbcefac6633b1d/raw/pikatrix_logo.svg">
 </a>
 <h1  align="center">
 Pikatrix
